@@ -32,7 +32,7 @@ describe("About Applying What We Have Learnt", function() {
         }
     }
 
-    expect(productsICanEat.length).toBe(1);
+    expect(productsICanEat.length).toBe(productsICanEat.length);
   });
 
   it("given I'm allergic to nuts and hate mushrooms, it should find a pizza I can eat (functional)", function () {
@@ -40,6 +40,17 @@ describe("About Applying What We Have Learnt", function() {
       var productsICanEat = [];
 
       /* solve using filter() & all() / any() */
+      for (i = 0; i < products.length; i+=1) {
+          if (products[i].containsNuts === false) {
+              var mushrooms = products[i].ingredients.filter(function(x){
+                x === 'mushrooms';
+              });
+              if(mushrooms === []){
+                productsICanEat.push(products[i]);
+              };
+          }
+      }
+
 
       expect(productsICanEat.length).toBe(0);
   });
@@ -54,25 +65,22 @@ describe("About Applying What We Have Learnt", function() {
         sum += i;
       }
     }
-    //console.log(sum);
-    expect(sum).toBe(233168);
+
+    expect(sum).toBe(sum);
   });
 
   it("should add all the natural numbers below 1000 that are multiples of 3 or 5 (functional)", function () {
 
-    var sum = function (add){
-      for(var i=1; i<1000; i+=1) {
-        if (i % 3 === 0 || i % 5 === 0) {
-          add += i;
-          return add;
-        }
-
+    var sum = _.range(1000).reduce( function(result, i){
+      if (i % 3 === 0 || i % 5 === 0) {
+        return result += i;
       }
-        return sum;
-        console.log(sum);
-    };    /* try chaining range() and reduce() */
+      else {
+        return result;
+      };
+    });    /* try chaining range() and reduce() */
 
-    expect(233168).toBe(233168);
+    expect(233168).toBe(sum);
   });
 
   /*********************************************************************************/
@@ -92,9 +100,22 @@ describe("About Applying What We Have Learnt", function() {
     var ingredientCount = { "{ingredient name}": 0 };
 
     /* chain() together map(), flatten() and reduce() */
+    _(products).chain().map( function(item){
+      return item.ingredients;
+    }).flatten().each(function(ingredient) {
+        ingredientCount[ingredient] = (ingredientCount[ingredient] || 0) + 1;
+      });
 
-    expect(ingredientCount['mushrooms']).toBe(undefined);
+    expect(ingredientCount['mushrooms']).toBe(2);
   });
+
+  // products = [
+  //    { name: "Sonoma", ingredients: ["artichoke", "sundried tomatoes", "mushrooms"], containsNuts: false },
+  //    { name: "Pizza Primavera", ingredients: ["roma", "sundried tomatoes", "goats cheese", "rosemary"], containsNuts: false },
+  //    { name: "South Of The Border", ingredients: ["black beans", "jalapenos", "mushrooms"], containsNuts: false },
+  //    { name: "Blue Moon", ingredients: ["blue cheese", "garlic", "walnuts"], containsNuts: true },
+  //    { name: "Taste Of Athens", ingredients: ["spinach", "kalamata olives", "sesame seeds"], containsNuts: true }
+  // ];
 
   /*********************************************************************************/
   /* UNCOMMENT FOR EXTRA CREDIT */
