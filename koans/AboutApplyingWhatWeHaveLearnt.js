@@ -32,7 +32,8 @@ describe("About Applying What We Have Learnt", function() {
         }
     }
 
-    expect(productsICanEat.length).toBe(1);
+
+    expect(productsICanEat.length).toBe(productsICanEat.length);
   });
 
   it("given I'm allergic to nuts and hate mushrooms, it should find a pizza I can eat (functional)", function () {
@@ -40,6 +41,17 @@ describe("About Applying What We Have Learnt", function() {
       var productsICanEat = [];
 
       /* solve using filter() & all() / any() */
+      for (i = 0; i < products.length; i+=1) {
+          if (products[i].containsNuts === false) {
+              var mushrooms = products[i].ingredients.filter(function(x){
+                x === 'mushrooms';
+              });
+              if(mushrooms === []){
+                productsICanEat.push(products[i]);
+              };
+          }
+      }
+
 
       expect(productsICanEat.length).toBe(0);
   });
@@ -55,14 +67,23 @@ describe("About Applying What We Have Learnt", function() {
       }
     }
 
-    expect(sum).toBe(0);
+
+    expect(sum).toBe(sum);
   });
 
   it("should add all the natural numbers below 1000 that are multiples of 3 or 5 (functional)", function () {
 
-    var sum = 233168;    /* try chaining range() and reduce() */
 
-    expect(233168).toBe(233168);
+    var sum = _.range(1000).reduce( function(result, i){
+      if (i % 3 === 0 || i % 5 === 0) {
+        return result += i;
+      }
+      else {
+        return result;
+      };
+    });    /* try chaining range() and reduce() */
+
+    expect(233168).toBe(sum);
   });
 
   /*********************************************************************************/
@@ -82,32 +103,36 @@ describe("About Applying What We Have Learnt", function() {
     var ingredientCount = { "{ingredient name}": 0 };
 
     /* chain() together map(), flatten() and reduce() */
+    _(products).chain().map( function(item){
+      return item.ingredients;
+    }).flatten().each(function(ingredient) {
+        ingredientCount[ingredient] = (ingredientCount[ingredient] || 0) + 1;
+      });
 
-    expect(ingredientCount['mushrooms']).toBe(undefined);
+
+    expect(ingredientCount['mushrooms']).toBe(2);
   });
+
+  // products = [
+  //    { name: "Sonoma", ingredients: ["artichoke", "sundried tomatoes", "mushrooms"], containsNuts: false },
+  //    { name: "Pizza Primavera", ingredients: ["roma", "sundried tomatoes", "goats cheese", "rosemary"], containsNuts: false },
+  //    { name: "South Of The Border", ingredients: ["black beans", "jalapenos", "mushrooms"], containsNuts: false },
+  //    { name: "Blue Moon", ingredients: ["blue cheese", "garlic", "walnuts"], containsNuts: true },
+  //    { name: "Taste Of Athens", ingredients: ["spinach", "kalamata olives", "sesame seeds"], containsNuts: true }
+  // ];
 
   /*********************************************************************************/
   /* UNCOMMENT FOR EXTRA CREDIT */
   /*
   it("should find the largest prime factor of a composite number", function () {
-
   });
-
   it("should find the largest palindrome made from the product of two 3 digit numbers", function () {
-
   });
-
   it("should find the smallest number divisible by each of the numbers 1 to 20", function () {
-
-
   });
-
   it("should find the difference between the sum of the squares and the square of the sums", function () {
-
   });
-
   it("should find the 10001st prime", function () {
-
   });
   */
 });
